@@ -22,9 +22,10 @@ export async function activate(context: vscode.ExtensionContext) {
       return {
         label: item.title,
         detail: item.description,
+        link: item.link,
       };
     });
-  console.log({articles});
+
   let disposable = vscode.commands.registerCommand(
     'kennysearch.helloWorld',
     async () => {
@@ -39,7 +40,10 @@ export async function activate(context: vscode.ExtensionContext) {
       const article = await vscode.window.showQuickPick(articles, {
         matchOnDetail: true,
       });
-      console.log(article);
+      if (!article) {
+        return;
+      }
+      vscode.env.openExternal(article.link as never);
       vscode.window.showInformationMessage('Searching for data');
     }
   );
